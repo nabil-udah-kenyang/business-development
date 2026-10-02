@@ -4,7 +4,6 @@ namespace App\Services;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
-use Symfony\Component\Process\Process;
 
 class ImageWebpService
 {
@@ -16,31 +15,18 @@ class ImageWebpService
             mkdir($directory, 0755, true);
         }
 
+        // Keep the original file instead of invoking ImageMagick. Shared
+        // hosting providers commonly do not expose the `magick` binary.
         $extension = strtolower($file->getClientOriginalExtension());
         $filename = $prefix.'-'.now()->format('YmdHis').'-'.Str::random(6);
+        $relativePath = 'image/'.$filename.'.'.$extension;
 
-        if ($extension === 'svg') {
-            $file->move($directory, $filename.'.svg');
-
-            return 'image/'.$filename.'.svg';
+        try {
+            $file->move($directory, $filename.'.'.$extension);
+        } catch (\Throwable $exception) {
+            throw new \RuntimeException('Gambar gagal disimpan. Pastikan folder public/image dapat ditulis oleh PHP.', 0, $exception);
         }
 
-        $outputPath = $directory.'/'.$filename.'.webp';
-        $process = new Process([
-            'magick',
-            $file->getRealPath(),
-            '-auto-orient',
-            '-quality',
-            '88',
-            $outputPath,
-        ]);
-        $process->setTimeout(60);
-        $process->mustRun();
-
-        if (! is_file($outputPath)) {
-            throw new \RuntimeException('Gambar gagal dikonversi ke WebP.');
-        }
-
-        return 'image/'.$filename.'.webp';
+        return $relativePath;
     }
 }

@@ -275,6 +275,23 @@ html.dark .public-header .nav-link.active {
 html.dark .public-header .header-theme-toggle {
     box-shadow:inset 5px 5px 10px rgba(0,0,0,.3), inset -5px -5px 10px rgba(210,230,235,.09) !important;
 }
+
+/* On small screens the public header is intentionally lightweight. Keep the
+   dark theme from bringing back the desktop card treatment. */
+@media (max-width: 767px) {
+    html.dark .public-header > div {
+        background:transparent;
+        border-color:transparent;
+        box-shadow:none !important;
+    }
+
+    html.dark .public-header .header-theme-toggle {
+        background:#293237;
+        border-color:rgba(210,230,235,.14);
+        color:#c4c0ff;
+        box-shadow:0 6px 14px rgba(0,0,0,.28), inset 0 1px 0 rgba(210,230,235,.08) !important;
+    }
+}
 html.dark .product-draft-note { background:#dfe8ea !important; border:1px solid #c4d3d7; color:#26363b !important; }
 html.dark .product-draft-note-title { color:#26363b !important; }
 html.dark .product-draft-note-description { color:#50636a !important; }
