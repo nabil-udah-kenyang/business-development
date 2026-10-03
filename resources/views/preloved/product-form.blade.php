@@ -85,6 +85,7 @@
             <div class="product-draft-note rounded-2xl bg-violet-50 p-4 text-sm leading-6 text-violet-800">
                 <strong class="product-draft-note-title">Status awal: Draft</strong>
                 <p class="product-draft-note-description">Barang akan tampil setelah disetujui oleh Business Development HMPS MI.</p>
+                <p class="product-draft-note-description mt-1">Biaya upload preloved: <strong>Rp{{ number_format($prelovedUploadFee, 0, ',', '.') }}</strong></p>
             </div>
             <div class="flex flex-wrap gap-3">
                 <button type="submit" class="btn-primary">{{ $editing ? 'Simpan perubahan' : 'Simpan sebagai draft' }}</button>

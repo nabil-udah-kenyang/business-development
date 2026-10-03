@@ -8,7 +8,9 @@
         <a href="{{ route('seller.products.create') }}" class="btn-primary"><i data-lucide="plus" class="h-4 w-4"></i><span class="hidden sm:inline">Tambah produk</span></a>
     </div>
 
-    <div class="soft-card mt-8 overflow-hidden">
+    @include('partials.product-publication-note')
+
+    <div class="soft-card mt-5 overflow-hidden">
         <form method="GET" action="{{ route('seller.products') }}" class="flex flex-col gap-3 border-b border-slate-200/70 p-4 sm:flex-row">
             <div class="soft-inset flex flex-1 items-center gap-2 rounded-xl px-3"><i data-lucide="search" class="h-4 w-4 text-slate-400"></i><input type="search" name="q" value="{{ $search }}" class="w-full border-0 bg-transparent py-2 text-sm outline-none" placeholder="Cari produk, kode, atau kategori..." autocomplete="off"></div>
             <select name="status" class="field sm:w-40">

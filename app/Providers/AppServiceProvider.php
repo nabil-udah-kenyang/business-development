@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Admin\SiteSetting;
+use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -115,6 +116,31 @@ class AppServiceProvider extends ServiceProvider
             }
 
             $view->with(compact('hasValidationErrors', 'isFlashError', 'flashMessage'));
+        });
+
+        View::composer('partials.product-publication-note', function ($view) {
+            $whatsappNumber = User::query()
+                ->where('role', 'superadmin')
+                ->whereNotNull('whatsapp')
+                ->value('whatsapp');
+
+            $sourceNumber = $whatsappNumber ?: SiteSetting::first()?->contact_whatsapp;
+            $whatsappNumber = preg_replace('/\D+/', '', $sourceNumber ?? '');
+
+            if (str_starts_with($whatsappNumber, '0')) {
+                $whatsappNumber = '62'.substr($whatsappNumber, 1);
+            }
+
+            $view->with('whatsappLink', $whatsappNumber !== '' ? 'https://wa.me/'.$whatsappNumber : null);
+        });
+
+        View::composer(['seller.product-form', 'preloved.product-form'], function ($view) {
+            $settings = SiteSetting::first();
+
+            $view->with([
+                'umkmUploadFee' => $settings?->umkm_upload_fee ?? 10000,
+                'prelovedUploadFee' => $settings?->preloved_upload_fee ?? 5000,
+            ]);
         });
 
         $branding = function (): array {
